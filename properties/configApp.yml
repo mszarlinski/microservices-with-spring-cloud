@@ -1,0 +1,11 @@
+﻿---
+info-message: Environment is unknown
+debug-mode: true
+---
+spring.profiles: dev
+info-message: Welcome to development environment
+
+---
+spring.profiles: prod
+info-message: Attention! This is a production setup!
+debug-mode: false
