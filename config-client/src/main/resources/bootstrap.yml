@@ -1,0 +1,9 @@
+---
+spring:
+  cloud:
+    config:
+      uri: http://localhost:7080
+  application:
+    name: configApp
+
+server.port: 7081
