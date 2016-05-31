@@ -1,2 +1,17 @@
 ﻿---
 server.port: 7010
+
+---
+spring.profiles: PRIMARY
+server.port: 7011
+eureka.client.serviceUrl.defaultZone: http://eureka-secondary:7012/eureka,http://eureka-tertiary:7013/eureka
+
+---
+spring.profiles: SECONDARY
+server.port: 7012
+eureka.client.serviceUrl.defaultZone: http://eureka-primary:7011/eureka,http://eureka-tertiary:7013/eureka
+
+---
+spring.profiles: TERTIARY
+server.port: 7013
+eureka.client.serviceUrl.defaultZone: http://eureka-primary:7011/eureka,http://eureka-secondary:7012/eureka

@@ -2,6 +2,6 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:7010/eureka
+      defaultZone: http://eureka-primary:7011/eureka,http://eureka-secondary:7012/eureka,http://eureka-tertiary:7013/eureka
 names: Ala,Barbara,Zosia
 server.port: 0
