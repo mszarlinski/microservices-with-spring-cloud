@@ -5,3 +5,7 @@ spring:
   cloud:
     config:
       uri: http://localhost:7080
+# Allow Eureka to recognize two apps of the same type on the same host as separate instances:
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}

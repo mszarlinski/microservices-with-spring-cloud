@@ -3,5 +3,12 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka-primary:7011/eureka,http://eureka-secondary:7012/eureka,http://eureka-tertiary:7013/eureka
-names: Ala,Barbara,Zosia
 server.port: 0
+
+---
+spring.profiles: FEMALE
+names: Ala,Barbara,Zosia
+
+---
+spring.profiles: MALE
+names: Adam,Maciej,Zenon
