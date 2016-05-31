@@ -2,3 +2,6 @@
 spring:
   application:
     name: consumer
+  cloud:
+    config:
+      uri: http://localhost:7080

@@ -1,6 +1,6 @@
----
-server.port: 0
+﻿---
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:7010/eureka
+server.port: 0
