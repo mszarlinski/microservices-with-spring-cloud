@@ -1,16 +1,13 @@
 package pl.mszarlinski.udemy.microservices.discovery;
 
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
-
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -27,13 +24,13 @@ public class GreetingController {
 
     private static final String DEFAULT_GREETING = "Default greeting";
 
-    private final DiscoveryClient discoveryClient;
+    private final LoadBalancerClient loadBalancerClient;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
-    public GreetingController(final DiscoveryClient discoveryClient) {
-        this.discoveryClient = discoveryClient;
+    public GreetingController(final LoadBalancerClient loadBalancerClient) {
+        this.loadBalancerClient = loadBalancerClient;
     }
 
     @RequestMapping("/greeting")
@@ -54,11 +51,8 @@ public class GreetingController {
     }
 
     private Optional<URI> getProducerServiceUri() {
-        return chooseOne(discoveryClient.getInstances(PRODUCER_SERVICE_ID))
+        return Optional.ofNullable(loadBalancerClient.choose(PRODUCER_SERVICE_ID))
             .map(ServiceInstance::getUri);
     }
 
-    private static Optional<ServiceInstance> chooseOne(final List<ServiceInstance> serviceInstances) {
-        return isEmpty(serviceInstances) ? Optional.empty() : Optional.of(serviceInstances.get(0));
-    }
 }
