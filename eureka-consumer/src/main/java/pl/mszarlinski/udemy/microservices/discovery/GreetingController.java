@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author mszarlinski on 2016-05-25.
@@ -17,21 +16,19 @@ public class GreetingController {
 
     private static final Logger log = LoggerFactory.getLogger(GreetingController.class);
 
-    private static final String PRODUCER_SERVICE_ID = "PRODUCER";
-
     private static final String DEFAULT_GREETING = "Default greeting";
 
-    private final RestTemplate restTemplate;
+    private final ProducerClient producerClient;
 
     @Autowired
-    public GreetingController(final RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public GreetingController(final ProducerClient producerClient) {
+        this.producerClient = producerClient;
     }
 
     @RequestMapping("/greeting")
     public String greeting() {
         try {
-            return Optional.ofNullable(restTemplate.getForObject("http://" + PRODUCER_SERVICE_ID + "/name", String.class))
+            return Optional.ofNullable(producerClient.getName())
                 .map(this::createGreeting)
                 .orElse(DEFAULT_GREETING);
         } catch (Exception ex) {
