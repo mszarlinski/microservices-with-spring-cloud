@@ -1,9 +1,5 @@
 package pl.mszarlinski.udemy.microservices.discovery;
 
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,27 +10,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GreetingController {
 
-    private static final Logger log = LoggerFactory.getLogger(GreetingController.class);
-
     private static final String DEFAULT_GREETING = "Default greeting";
 
-    private final ProducerClient producerClient;
+    /**
+     * Separate bean is needed for a Hystrix aspect to work.
+     */
+    private final NameProvider nameProvider;
 
     @Autowired
-    public GreetingController(final ProducerClient producerClient) {
-        this.producerClient = producerClient;
+    public GreetingController(final NameProvider nameProvider) {
+        this.nameProvider = nameProvider;
     }
 
     @RequestMapping("/greeting")
     public String greeting() {
-        try {
-            return Optional.ofNullable(producerClient.getName())
-                .map(this::createGreeting)
-                .orElse(DEFAULT_GREETING);
-        } catch (Exception ex) {
-            log.error("Error in greeting", ex);
-            return DEFAULT_GREETING;
-        }
+        return nameProvider.tryFetchName()
+            .map(this::createGreeting)
+            .orElse(DEFAULT_GREETING);
     }
 
     private String createGreeting(final String name) {
