@@ -1,11 +1,12 @@
-﻿---
+---
 eureka:
   client:
     service-url:
       defaultZone: http://eureka-primary:7011/eureka,http://eureka-secondary:7012/eureka,http://eureka-tertiary:7013/eureka
----
-spring.profiles: CONSUMER-1
-server.port: 7021
----
-spring.profiles: CONSUMER-2
-server.port: 7022
+
+server.port: 7030
+
+turbine:
+  aggregator:
+    clusterConfig: CONSUMER
+  appConfig: CONSUMER
