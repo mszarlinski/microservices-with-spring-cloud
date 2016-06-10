@@ -1,0 +1,10 @@
+﻿---
+zuul:
+  prefix: /api
+  routes:
+    consumer: /consumer/**
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-primary:7011/eureka,http://eureka-secondary:7012/eureka,http://eureka-tertiary:7013/eureka
+server.port: 7090
