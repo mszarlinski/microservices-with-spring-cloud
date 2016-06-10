@@ -3,6 +3,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka-primary:7011/eureka,http://eureka-secondary:7012/eureka,http://eureka-tertiary:7013/eureka
+
+default-greeting: Default greeting
 ---
 spring.profiles: CONSUMER-1
 server.port: 7021

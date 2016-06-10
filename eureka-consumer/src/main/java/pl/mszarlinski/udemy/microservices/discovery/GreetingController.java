@@ -1,6 +1,11 @@
 package pl.mszarlinski.udemy.microservices.discovery;
 
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GreetingController {
 
-    private static final String DEFAULT_GREETING = "Default greeting";
+    private static final Logger log = LoggerFactory.getLogger(GreetingController.class);
+
+    @Value("${default-greeting}")
+    private String defaultGreeting;
 
     /**
      * Separate bean is needed for a Hystrix aspect to work.
@@ -22,11 +30,16 @@ public class GreetingController {
         this.nameProvider = nameProvider;
     }
 
+    @PostConstruct
+    public void init() {
+        log.info("***** defaultGreeting = " + defaultGreeting);
+    }
+
     @RequestMapping("/greeting")
     public String greeting() {
         return nameProvider.tryFetchName()
             .map(this::createGreeting)
-            .orElse(DEFAULT_GREETING);
+            .orElse(defaultGreeting);
     }
 
     private String createGreeting(final String name) {
